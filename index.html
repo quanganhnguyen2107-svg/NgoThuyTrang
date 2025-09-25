@@ -94,6 +94,27 @@
       pointer-events: none;
       z-index: 1;
     }
+    /* cảm ơn hài hước */
+    .thanks-container { text-align:center; margin-top:20px; }
+    .thanks-container button {
+      padding:12px 24px;
+      margin:10px;
+      border:none;
+      border-radius:12px;
+      cursor:pointer;
+      font-size:18px;
+      font-weight:bold;
+      transition:all 0.3s ease;
+    }
+    #thanksBtn { background:#4caf50; color:#fff; }
+    #noBtn { background:#f44336; color:#fff; }
+    #funny-text {
+      margin-top:15px;
+      font-size:18px;
+      font-weight:bold;
+      color:#550022;
+      min-height:24px;
+    }
   </style>
 </head>
 <body>
@@ -115,7 +136,7 @@
         Không thích sự giả dối <br>
         Ăn dưa phải tính theo tạ🍉
       </div>
-      <img src="IMG_2936.JPG" alt="Ảnh Ngô Thùy Trang" class="avatar" />
+      <img src="IMG_2936.jpg" alt="Ảnh Ngô Thùy Trang" class="avatar" />
     </div>
 
     <div class="countdown" id="countdown">Đang tính thời gian...</div>
@@ -134,9 +155,10 @@
       </p>
     </div>
 
-    <div>
-      <button id="thanksBtn" onclick="sendHearts()">Cảm ơn 💕</button>
-      <button id="noBtn" onclick="growThanks()">Không cảm ơn 🙃</button>
+    <div class="thanks-container">
+      <button id="thanksBtn" onclick="sendHearts()">🙏 Cảm ơn 💕</button>
+      <button id="noBtn" onclick="growThanks()">🙅 Không cảm ơn</button>
+      <p id="funny-text"></p>
     </div>
   </div>
 
@@ -166,6 +188,7 @@
     function showGift(){
       document.getElementById("gift").style.display="block";
       sendHearts(); // trái tim bay khi mở quà
+      alert("🎁 Bạn vừa mở quà! Nhưng... quà ảo thôi nhé 😜");
     }
 
     // 🎶 Music
@@ -178,9 +201,13 @@
       playing=!playing;
     }
 
-    // ❤️ Hearts
+    // ❤️ Hearts + Thông báo
     function sendHearts(){
-      for(let i=0;i<30;i++){
+      const funnyText=document.getElementById("funny-text");
+      funnyText.innerText="🥰 Cảm ơn cậu nhé! Trái tim bay tung tóe khắp màn hình ❤️";
+      funnyText.style.color="green";
+
+      for(let i=0;i<20;i++){
         let heart=document.createElement("div");
         heart.className="heart";
         heart.textContent="❤️";
@@ -190,6 +217,9 @@
         document.getElementById("heart-container").appendChild(heart);
         setTimeout(()=>heart.remove(),4000);
       }
+
+      // thêm TB hài hước
+      setTimeout(()=>alert("💌 Cảm ơn đã bấm nút! Bạn vừa làm trái tim mình bay loạn xạ 🤣"),1000);
     }
 
     // 😅 Grow Thanks button
@@ -198,6 +228,10 @@
       let style=window.getComputedStyle(btn);
       let size=parseFloat(style.fontSize);
       btn.style.fontSize=(size+5)+"px";
+      const funnyText=document.getElementById("funny-text");
+      funnyText.innerText="😏 Không cảm ơn cũng không thoát đâu, nút kia sẽ to dần đó!";
+      funnyText.style.color="red";
+      alert("🙃 Không cảm ơn hả? Thế thì nút Cảm ơn sẽ ngày càng to ra đó nhé!");
     }
 
     // 🎆 Fireworks
@@ -235,4 +269,3 @@
   </script>
 </body>
 </html>
-

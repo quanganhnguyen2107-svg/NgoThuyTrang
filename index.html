@@ -4,259 +4,234 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Chúc Mừng Sinh Nhật Ngô Thùy Trang</title>
-
   <style>
     body {
+      margin: 0; padding: 0;
       background: linear-gradient(135deg, #ffe0e9, #ffc0cb);
       font-family: 'Segoe UI', Tahoma, sans-serif;
-      margin: 0; padding: 0;
-      display: flex; flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      color: #550022;
       overflow-x: hidden;
-      position: relative;
+      color: #550022;
     }
-
     .container {
       background: white;
       border-radius: 20px;
-      padding: 30px 20px 50px 20px;
+      padding: 30px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-      max-width: 500px;
-      width: 90%;
-      margin-top: 40px;
-      text-align: center;
+      max-width: 800px;
+      margin: 40px auto;
       position: relative;
       z-index: 2;
     }
-
-    h1 { margin-bottom: 5px; font-size: 2.6em; color: #d81b60; }
-    h2 { margin-top: 0; font-weight: normal; margin-bottom: 20px; }
-
+    h1 { font-size: 2.6em; color: #d81b60; margin: 0; }
+    h2 { font-weight: normal; margin: 0 0 20px; }
+    .info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .info-text {
+      flex: 1;
+      text-align: left;
+      font-size: 1.1em;
+      line-height: 1.6;
+    }
     .avatar {
-      width: 160px; height: 160px;
-      border-radius: 50%; object-fit: cover;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      object-fit: cover;
       border: 6px solid #d81b60;
-      margin-bottom: 20px; transition: transform 0.3s ease;
     }
-    .avatar:hover { transform: scale(1.05); }
-
-    .countdown { font-size: 1.2em; font-weight: 600; margin: 15px 0; color: #5a0a32; }
-
+    .countdown {
+      font-size: 1.2em;
+      font-weight: 600;
+      margin: 15px 0;
+      color: #5a0a32;
+    }
     button {
-      background: #d81b60; border: none; color: white;
-      font-weight: 700; font-size: 1.1em;
-      padding: 12px 24px; border-radius: 12px;
-      cursor: pointer; margin: 10px;
-      transition: background-color 0.25s ease, transform 0.2s ease;
+      background: #d81b60;
+      border: none;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1em;
+      padding: 12px 24px;
+      border-radius: 12px;
+      cursor: pointer;
+      margin: 10px;
+      transition: all 0.3s ease;
     }
-    button:hover { background: #b71c46; transform: scale(1.05); }
-
-    .gift { margin-top: 30px; display: none; }
+    button:hover { background: #b71c46; }
+    .gift {
+      margin-top: 30px;
+      display: none;
+    }
     .gift img { width: 220px; border-radius: 16px; margin-bottom: 10px; }
-    .message { font-size: 1.25em; color: #b71c46; font-weight: 600; }
-
-    /* Album */
-    .album {
-      margin-top: 30px; position: relative;
-      width: 100%; max-width: 400px; height: 500px;
-      overflow: hidden; border-radius: 16px; background: #fff;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-      display: flex; align-items: center; justify-content: center;
-    }
-    .album img {
-      max-height: 100%; max-width: 100%;
-      object-fit: contain; position: absolute;
-      opacity: 0; transition: opacity 1s ease;
-    }
-    .album img.active { opacity: 1; position: relative; }
-
-    #result { margin-top: 15px; font-weight: bold; }
-
-    /* Fireworks canvas */
-    #fireworks {
-      position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none; z-index: 1;
-    }
-
-    /* Hearts floating */
-    .floating-heart {
+    .message { font-size: 1.1em; color: #b71c46; font-weight: 600; line-height: 1.6; }
+    #heart-container {
       position: fixed;
-      bottom: -20px;
-      font-size: 20px;
-      color: red;
-      animation: floatUp 6s linear forwards;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       pointer-events: none;
-      z-index: 0;
+      overflow: hidden;
+      z-index: 10;
     }
-    @keyframes floatUp {
+    .heart {
+      position: absolute;
+      color: red;
+      font-size: 20px;
+      animation: fly 4s linear forwards;
+    }
+    @keyframes fly {
       0% { transform: translateY(0) scale(1); opacity: 1; }
-      50% { opacity: 0.7; }
-      100% { transform: translateY(-110vh) scale(1.5); opacity: 0; }
+      100% { transform: translateY(-100vh) scale(2); opacity: 0; }
+    }
+    canvas {
+      position: fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      pointer-events: none;
+      z-index: 1;
     }
   </style>
 </head>
 <body>
+  <!-- 🎆 Pháo hoa -->
   <canvas id="fireworks"></canvas>
+  <!-- ❤️ Trái tim bay -->
+  <div id="heart-container"></div>
 
   <div class="container">
     <h1>🎉 Chúc Mừng Sinh Nhật! 🎂</h1>
     <h2>Ngô Thùy Trang (Ngố)</h2>
 
-    <img src="IMG_2936.jpg" alt="Ảnh Ngô Thùy Trang" class="avatar" />
+    <div class="info">
+      <div class="info-text">
+        📐 <b>Thông tin</b><br>
+        Ngô Thùy Trang <br>
+        Đc: Cam Đông - Lai Khê - Thành phố Hải Phòng <br>
+        Ghét màu hồng <br>
+        Không thích sự giả dối <br>
+        Ăn dưa phải tính theo tạ🍉
+      </div>
+      <img src="IMG_2936.jpg" alt="Ảnh Ngô Thùy Trang" class="avatar" />
+    </div>
 
     <div class="countdown" id="countdown">Đang tính thời gian...</div>
 
-    <button onclick="showGift()">Nhận quà 🎁</button>
-    <button onclick="playMusic()">Bật nhạc 🎶</button>
+    <button onclick="showGift()">🎁 Nhận quà</button>
+    <button id="musicBtn" onclick="toggleMusic()">🎶 Bật nhạc</button>
 
     <div class="gift" id="gift">
       <img src="https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif" alt="Quà" />
-      <p class="message">Chúc Trang tuổi mới thật nhiều niềm vui, sức khỏe và hạnh phúc!(không có quà đâu đừng hóng) 💖</p>
+      <p class="message">
+        🎂 Chúc mừng sinh nhật cậu!(Không có quà đâu nhé đừng hóng) 🎉<br>
+        Tuổi mới chúc cậu luôn mạnh khỏe, bình an và thật nhiều niềm vui.<br>
+        Mong rằng mỗi ngày trôi qua đều mang đến cho cậu những cơ hội mới, thành công mới và thật nhiều trải nghiệm đáng nhớ.<br>
+        Hãy luôn giữ nụ cười rạng rỡ trên môi, sống hết mình với đam mê và ước mơ của mình.<br>
+        Chúc tình bạn, tình yêu và hạnh phúc luôn đồng hành cùng cậu trên mọi chặng đường. 💖
+      </p>
     </div>
 
-    <!-- Album -->
-    <div class="album" id="album">
-      <img src="IMG_3843.jpg" class="active">
-      <img src="beauty_20191124130331_Original.jpg">
-      <img src="IMG_0240.jpg">
-      <img src="IMG_0272.jpg">
-      <img src="IMG_0279.jpg">
-      <img src="fd6c26cd384ae3ef59f1852e07767c5a.jpg">
-      <img src="IMG_0961.jpg">
-      <img src="IMG_1542_Original.jpg">
-      <img src="quality_restoration_20241020000055418_Original.jpg">
-      <img src="IMG_0694_Original.jpg">
-    </div>
-
-    <!-- Nút cảm ơn -->
-    <div style="margin-top:20px;">
-      <button id="btn-thank" onclick="thankYou()">Cảm ơn ❤️</button>
-      <button onclick="noThank()">Không cảm ơn 😏</button>
-      <div id="result"></div>
+    <div>
+      <button id="thanksBtn" onclick="sendHearts()">Cảm ơn 💕</button>
+      <button id="noBtn" onclick="growThanks()">Không cảm ơn 🙃</button>
     </div>
   </div>
 
-  <audio id="bg-music" loop>
-    <source src="https://www.bensound.com/bensound-music/bensound-happyrock.mp3" type="audio/mp3">
+  <!-- 🎶 Nhạc nền -->
+  <audio id="bgMusic" loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
   </audio>
 
   <script>
-    // Countdown
+    // 🎂 Countdown
     function updateCountdown() {
       const now = new Date();
       const currentYear = now.getFullYear();
-      let birthday = new Date(currentYear, 8, 26);
-      if (now > birthday) birthday = new Date(currentYear+1, 8, 26);
-
+      let birthday = new Date(currentYear, 8, 26); 
+      if (now > birthday) birthday = new Date(currentYear + 1, 8, 26);
       const diff = birthday - now;
       const d = Math.floor(diff / (1000*60*60*24));
       const h = Math.floor((diff / (1000*60*60)) % 24);
       const m = Math.floor((diff / (1000*60)) % 60);
       const s = Math.floor((diff / 1000) % 60);
-
       document.getElementById("countdown").textContent =
-        `⏳ Còn ${d} ngày ${h} giờ ${m} phút ${s} giây nữa là sinh nhật Trang!`;
+        `⏳ Còn ${d} ngày ${h} giờ ${m} phút ${s} giây đến sinh nhật của Trang!`;
     }
     setInterval(updateCountdown, 1000); updateCountdown();
 
-    function showGift() { document.getElementById("gift").style.display = "block"; }
-    function playMusic() { document.getElementById("bg-music").play(); }
-
-    // Album slider
-    const album = document.querySelectorAll("#album img");
-    let index = 0;
-    setInterval(() => {
-      album[index].classList.remove("active");
-      index = (index+1) % album.length;
-      album[index].classList.add("active");
-    }, 3000);
-
-    // Buttons
-    let thankBtn = document.getElementById("btn-thank");
-    let result = document.getElementById("result");
-    let size = 1;
-
-    function thankYou() {
-      result.textContent = "🥰 Không phải khách xáo thế broo!";
-      result.style.color = "#d81b60";
-      createHeartsBurst();
-    }
-    function noThank() {
-      size += 0.3;
-      thankBtn.style.transform = `scale(${size})`;
-      result.textContent = "😏 Nút 'Cảm ơn' đang to dần... hãy bấm nó thôi!";
-      result.style.color = "red";
+    // 🎁 Gift
+    function showGift(){
+      document.getElementById("gift").style.display="block";
+      sendHearts(); // trái tim bay khi mở quà
     }
 
-    // Hearts burst when click
-    function createHeartsBurst() {
-      for (let i = 0; i < 30; i++) {
-        let heart = document.createElement("div");
-        heart.innerHTML = "❤️";
-        heart.style.position = "fixed";
-        heart.style.left = Math.random() * window.innerWidth + "px";
-        heart.style.top = window.innerHeight + "px";
-        heart.style.fontSize = (Math.random() * 25 + 15) + "px";
-        heart.style.opacity = 1;
-        heart.style.transition = "all 3s ease-out";
-        document.body.appendChild(heart);
+    // 🎶 Music
+    let playing=false;
+    function toggleMusic(){
+      const music=document.getElementById("bgMusic");
+      const btn=document.getElementById("musicBtn");
+      if(playing){ music.pause(); btn.textContent="🎶 Bật nhạc"; }
+      else{ music.play(); btn.textContent="🔇 Tắt nhạc"; }
+      playing=!playing;
+    }
 
-        let x = (Math.random()-0.5)*400;
-        let y = -window.innerHeight - Math.random()*200;
-        let rotate = Math.random()*720 - 360;
-
-        setTimeout(() => {
-          heart.style.transform = `translate(${x}px, ${y}px) rotate(${rotate}deg)`;
-          heart.style.opacity = 0;
-        }, 50);
-        setTimeout(() => { heart.remove(); }, 3500);
+    // ❤️ Hearts
+    function sendHearts(){
+      for(let i=0;i<30;i++){
+        let heart=document.createElement("div");
+        heart.className="heart";
+        heart.textContent="❤️";
+        heart.style.left=Math.random()*100+"vw";
+        heart.style.top="100vh";
+        heart.style.fontSize=(Math.random()*20+20)+"px";
+        document.getElementById("heart-container").appendChild(heart);
+        setTimeout(()=>heart.remove(),4000);
       }
     }
 
-    // Continuous floating hearts
-    function floatingHearts() {
-      const heart = document.createElement("div");
-      heart.classList.add("floating-heart");
-      heart.innerHTML = "❤️";
-      heart.style.left = Math.random() * window.innerWidth + "px";
-      heart.style.fontSize = (Math.random()*20+15)+"px";
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 6000);
+    // 😅 Grow Thanks button
+    function growThanks(){
+      let btn=document.getElementById("thanksBtn");
+      let style=window.getComputedStyle(btn);
+      let size=parseFloat(style.fontSize);
+      btn.style.fontSize=(size+5)+"px";
     }
-    setInterval(floatingHearts, 800);
 
-    // Fireworks
-    const canvas = document.getElementById("fireworks");
-    const ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-
-    class Firework {
-      constructor(x,y,colors) {
-        this.particles=[];
-        for(let i=0;i<50;i++){
-          const a=Math.random()*2*Math.PI;
-          const s=Math.random()*5+2;
-          this.particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,alpha:1});
-        }
-        this.colors=colors;
+    // 🎆 Fireworks
+    const canvas=document.getElementById("fireworks");
+    const ctx=canvas.getContext("2d");
+    let particles=[];
+    function resize(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
+    window.onresize=resize; resize();
+    function random(min,max){ return Math.random()*(max-min)+min; }
+    function createFirework(x,y){
+      for(let i=0;i<80;i++){
+        particles.push({
+          x:x,y:y,
+          vx:random(-3,3),vy:random(-3,3),
+          alpha:1,
+          color:`hsl(${random(0,360)},100%,50%)`
+        });
       }
-      update(){ this.particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=0.05;p.alpha-=0.01;}); }
-      draw(ctx){ this.particles.forEach(p=>{ctx.fillStyle=`rgba(${this.colors},${p.alpha})`;ctx.beginPath();ctx.arc(p.x,p.y,2,0,2*Math.PI);ctx.fill();}); }
     }
-
-    let fireworks=[];
+    canvas.addEventListener("click",e=>createFirework(e.clientX,e.clientY));
+    setInterval(()=>createFirework(Math.random()*canvas.width, Math.random()*canvas.height/2), 2000);
     function animate(){
-      ctx.fillStyle="rgba(0,0,0,0.1)";
+      ctx.fillStyle="rgba(0,0,0,0.2)";
       ctx.fillRect(0,0,canvas.width,canvas.height);
-      fireworks.forEach((f,i)=>{f.update();f.draw(ctx);if(f.particles.every(p=>p.alpha<=0)){fireworks.splice(i,1);}});
+      particles.forEach((p,i)=>{
+        p.x+=p.vx; p.y+=p.vy; p.alpha-=0.01;
+        ctx.globalAlpha=p.alpha;
+        ctx.fillStyle=p.color;
+        ctx.beginPath(); ctx.arc(p.x,p.y,2,0,Math.PI*2); ctx.fill();
+        if(p.alpha<=0) particles.splice(i,1);
+      });
       requestAnimationFrame(animate);
     }
     animate();
-    setInterval(()=>{const x=Math.random()*canvas.width;const y=Math.random()*canvas.height/2;const c=`${Math.random()*255},${Math.random()*255},${Math.random()*255}`;fireworks.push(new Firework(x,y,c));},1500);
-    window.addEventListener("resize",()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;});
   </script>
 </body>
 </html>

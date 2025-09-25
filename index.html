@@ -22,8 +22,8 @@
       position: relative;
       z-index: 2;
     }
-    h1 { font-size: 2.6em; color: #d81b60; margin: 0; }
-    h2 { font-weight: normal; margin: 0 0 20px; }
+    h1 { font-size: 2.6em; color: #d81b60; margin: 0; text-align: center; }
+    h2 { font-weight: normal; margin: 0 0 20px; text-align: center; }
     .info {
       display: flex;
       align-items: center;
@@ -44,11 +44,57 @@
       object-fit: cover;
       border: 6px solid #d81b60;
     }
+    
+    /* Album ảnh */
+    .album {
+      position: relative;
+      width: 100%;
+      height: 400px;
+      margin: 30px 0;
+      text-align: center;
+    }
+    .album img {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+      height: 400px;
+      object-fit: cover;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+    .album img.active {
+      opacity: 1;
+    }
+    .album-controls {
+      text-align: center;
+      margin: 15px 0;
+    }
+    .album-controls button {
+      background: #d81b60;
+      border: none;
+      color: white;
+      font-size: 1.2em;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin: 0 10px;
+      transition: all 0.3s ease;
+    }
+    .album-controls button:hover {
+      background: #b71c46;
+      transform: scale(1.1);
+    }
+    
     .countdown {
       font-size: 1.2em;
       font-weight: 600;
       margin: 15px 0;
       color: #5a0a32;
+      text-align: center;
     }
     button {
       background: #d81b60;
@@ -66,6 +112,7 @@
     .gift {
       margin-top: 30px;
       display: none;
+      text-align: center;
     }
     .gift img { width: 220px; border-radius: 16px; margin-bottom: 10px; }
     .message { font-size: 1.1em; color: #b71c46; font-weight: 600; line-height: 1.6; }
@@ -136,13 +183,34 @@
         Không thích sự giả dối <br>
         Ăn dưa phải tính theo tạ🍉
       </div>
-      <img src="IMG_2936.jpg" alt="Ảnh Ngô Thùy Trang" class="avatar" />
+      <img src="IMG_2936.JPG" alt="Ảnh Ngô Thùy Trang" class="avatar" />
+    </div>
+
+    <!-- Album ảnh -->
+    <div class="album" id="album">
+      <img src="IMG_3843.jpg" class="active" alt="Ảnh 1" />
+      <img src="beauty_20191124130331_Original.jpg" alt="Ảnh 2" />
+      <img src="IMG_0240.jpg" alt="Ảnh 3" />
+      <img src="IMG_0272.jpg" alt="Ảnh 4" />
+      <img src="IMG_0279.jpg" alt="Ảnh 5" />
+      <img src="fd6c26cd384ae3ef59f1852e07767c5a.jpg" alt="Ảnh 6" />
+      <img src="IMG_0961.jpg" alt="Ảnh 7" />
+      <img src="IMG_1542_Original.jpg" alt="Ảnh 8" />
+      <img src="quality_restoration_20241020000055418_Original.jpg" alt="Ảnh 9" />
+      <img src="IMG_0694_Original.jpg" alt="Ảnh 10" />
+    </div>
+    
+    <div class="album-controls">
+      <button onclick="prevImage()">⬅️ Ảnh trước</button>
+      <button onclick="nextImage()">Ảnh sau ➡️</button>
     </div>
 
     <div class="countdown" id="countdown">Đang tính thời gian...</div>
 
-    <button onclick="showGift()">🎁 Nhận quà</button>
-    <button id="musicBtn" onclick="toggleMusic()">🎶 Bật nhạc</button>
+    <div style="text-align: center;">
+      <button onclick="showGift()">🎁 Nhận quà</button>
+      <button id="musicBtn" onclick="toggleMusic()">🎶 Bật nhạc</button>
+    </div>
 
     <div class="gift" id="gift">
       <img src="https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif" alt="Quà" />
@@ -266,6 +334,34 @@
       requestAnimationFrame(animate);
     }
     animate();
+    
+    // Album ảnh
+    let currentImageIndex = 0;
+    const images = document.querySelectorAll('.album img');
+
+    function showImage(index) {
+      // Ẩn tất cả ảnh
+      images.forEach(img => img.classList.remove('active'));
+      
+      // Hiển thị ảnh hiện tại
+      images[index].classList.add('active');
+    }
+
+    function nextImage() {
+      currentImageIndex = (currentImageIndex + 1) % images.length;
+      showImage(currentImageIndex);
+    }
+
+    function prevImage() {
+      currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+      showImage(currentImageIndex);
+    }
+
+    // Tự động chuyển ảnh mỗi 5 giây
+    setInterval(nextImage, 5000);
+
+    // Hiển thị ảnh đầu tiên khi trang load
+    showImage(0);
   </script>
 </body>
 </html>

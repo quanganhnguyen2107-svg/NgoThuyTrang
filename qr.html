@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>QR Code</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    body {
+      margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif;
+      display: flex; align-items: center; justify-content: center;
+      height: 100%; background: linear-gradient(135deg,#ffe0f0,#ffd6e8);
+    }
+    .qr-container {
+      background: white; padding: 20px;
+      border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      text-align: center; transition: transform 0.3s ease;
+    }
+    .qr-container:hover { transform: scale(1.05); }
+    h3 { margin: 0 0 15px; color: #d81b60; font-size: 1.2em; }
+    #qrcode { width: 180px; height: 180px; margin: auto; }
+    p { font-size: 0.9em; color: #770033; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="qr-container">
+    <h3>📱 Scan để mở trên điện thoại</h3>
+    <div id="qrcode"></div>
+    <p>quanganhnguyen2107-svg.github.io/thuytrang</p>
+  </div>
+
+  <script>
+    const qrUrl = "https://quanganhnguyen2107-svg.github.io/thuytrang/";
+    new QRCode(document.getElementById("qrcode"), {
+      text: qrUrl,
+      width: 180, height: 180,
+      colorDark: "#550022", colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  </script>
+</body>
+</html>

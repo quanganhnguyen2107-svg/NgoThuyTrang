@@ -30,12 +30,14 @@
       justify-content: space-between;
       gap: 20px;
       margin-bottom: 20px;
+      flex-wrap: wrap;
     }
     .info-text {
       flex: 1;
       text-align: left;
       font-size: 1.1em;
       line-height: 1.6;
+      min-width: 250px;
     }
     .avatar {
       width: 180px;
@@ -72,21 +74,29 @@
     .album-controls {
       text-align: center;
       margin: 15px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
     }
     .album-controls button {
       background: #d81b60;
       border: none;
       color: white;
-      font-size: 1.2em;
+      font-size: 1.1em;
       padding: 10px 20px;
       border-radius: 10px;
       cursor: pointer;
-      margin: 0 10px;
       transition: all 0.3s ease;
     }
     .album-controls button:hover {
       background: #b71c46;
-      transform: scale(1.1);
+      transform: scale(1.05);
+    }
+    #image-counter {
+      font-weight: bold;
+      color: #d81b60;
+      min-width: 60px;
     }
     
     .countdown {
@@ -141,7 +151,6 @@
       pointer-events: none;
       z-index: 1;
     }
-    /* cảm ơn hài hước */
     .thanks-container { text-align:center; margin-top:20px; }
     .thanks-container button {
       padding:12px 24px;
@@ -162,12 +171,22 @@
       color:#550022;
       min-height:24px;
     }
+    
+    /* Responsive */
+    @media (max-width: 600px) {
+      .container { margin: 20px; padding: 20px; }
+      .album { height: 300px; }
+      .album img { 
+        width: 250px; 
+        height: 300px;
+      }
+      .info { flex-direction: column; text-align: center; }
+      h1 { font-size: 2em; }
+    }
   </style>
 </head>
 <body>
-  <!-- 🎆 Pháo hoa -->
   <canvas id="fireworks"></canvas>
-  <!-- ❤️ Trái tim bay -->
   <div id="heart-container"></div>
 
   <div class="container">
@@ -183,25 +202,26 @@
         Không thích sự giả dối <br>
         Ăn dưa phải tính theo tạ🍉
       </div>
-      <img src="IMG_2936.JPG" alt="Ảnh Ngô Thùy Trang" class="avatar" />
+      <img src="IMG_2936.jpg" alt="Ảnh Ngô Thùy Trang" class="avatar" onerror="this.src='https://i.pravatar.cc/300?img=32'" />
     </div>
 
     <!-- Album ảnh -->
-    <div class="album" id="album">
-      <img src="IMG_3843.jpg" class="active" alt="Ảnh 1" />
-      <img src="beauty_20191124130331_Original.jpg" alt="Ảnh 2" />
-      <img src="IMG_0240.jpg" alt="Ảnh 3" />
-      <img src="IMG_0272.jpg" alt="Ảnh 4" />
-      <img src="IMG_0279.jpg" alt="Ảnh 5" />
-      <img src="fd6c26cd384ae3ef59f1852e07767c5a.jpg" alt="Ảnh 6" />
-      <img src="IMG_0961.jpg" alt="Ảnh 7" />
-      <img src="IMG_1542_Original.jpg" alt="Ảnh 8" />
-      <img src="quality_restoration_20241020000055418_Original.jpg" alt="Ảnh 9" />
-      <img src="IMG_0694_Original.jpg" alt="Ảnh 10" />
+    <div class="album">
+      <img src="IMG_3843.jpg" class="active" alt="Ảnh Trang" onerror="handleImageError(this)" />
+      <img src="beauty_20191124130331_Original.jpg" alt="Ảnh Trang" onerror="handleImageError(this)" />
+      <img src="IMG_0240.jpg" alt="Ảnh Trang" onerror="handleImageError(this)" />
+      <img src="IMG_0272.jpg" alt="Ảnh Trang" onerror="handleImageError(this)" />
+      <img src="IMG_0279.jpg" alt="Ảnh Trang" onerror="handleImageError(this)" />
+      <img src="fd6c26cd384ae3ef59f1852e07767c5a.jpg" alt="Ảnh Trang" onerror="handleImageError(this)" />
+      <img src="IMG_0961.jpg" alt="Ảnh Trang" onerror="handleImageError(this)" />
+      <img src="IMG_1542_Original.jpg" alt="Ảnh Trang" onerror="handleImageError(this)" />
+      <img src="quality_restoration_20241020000055418_Original.jpg" alt="Ảnh Trang" onerror="handleImageError(this)" />
+      <img src="IMG_0694_Original.jpg" alt="Ảnh Trang" onerror="handleImageError(this)" />
     </div>
     
     <div class="album-controls">
       <button onclick="prevImage()">⬅️ Ảnh trước</button>
+      <span id="image-counter">1/10</span>
       <button onclick="nextImage()">Ảnh sau ➡️</button>
     </div>
 
@@ -230,13 +250,99 @@
     </div>
   </div>
 
-  <!-- 🎶 Nhạc nền -->
   <audio id="bgMusic" loop>
     <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
   </audio>
 
   <script>
-    // 🎂 Countdown
+    // 🔧 QUAN TRỌNG: Xử lý lỗi ảnh
+    function handleImageError(img) {
+      console.log('Ảnh lỗi: ' + img.src);
+      img.style.display = 'none';
+      
+      // Cập nhật số lượng ảnh thực tế
+      updateImageCounter();
+    }
+
+    // Album ảnh
+    let currentImageIndex = 0;
+    const images = document.querySelectorAll('.album img');
+    const imageCounter = document.getElementById('image-counter');
+
+    function updateImageCounter() {
+      const visibleImages = Array.from(images).filter(img => img.style.display !== 'none');
+      const currentVisibleIndex = Array.from(images).indexOf(images[currentImageIndex]);
+      
+      if (visibleImages.length > 0) {
+        imageCounter.textContent = `${currentVisibleIndex + 1}/${visibleImages.length}`;
+      } else {
+        imageCounter.textContent = '0/0';
+        // Nếu không có ảnh nào hiển thị, thêm ảnh mặc định
+        const album = document.querySelector('.album');
+        album.innerHTML = '<p style="color: #d81b60; font-size: 1.2em;">🎨 Không có ảnh để hiển thị</p>';
+      }
+    }
+
+    function showImage(index) {
+      // Tìm ảnh tiếp theo có thể hiển thị
+      let found = false;
+      for (let i = 0; i < images.length; i++) {
+        const newIndex = (index + i) % images.length;
+        if (images[newIndex].style.display !== 'none') {
+          currentImageIndex = newIndex;
+          found = true;
+          break;
+        }
+      }
+      
+      if (!found) return;
+      
+      // Ẩn tất cả ảnh
+      images.forEach(img => img.classList.remove('active'));
+      
+      // Hiển thị ảnh hiện tại
+      images[currentImageIndex].classList.add('active');
+      updateImageCounter();
+    }
+
+    function nextImage() {
+      let nextIndex = (currentImageIndex + 1) % images.length;
+      let attempts = 0;
+      
+      // Tìm ảnh tiếp theo có thể hiển thị
+      while (images[nextIndex].style.display === 'none' && attempts < images.length) {
+        nextIndex = (nextIndex + 1) % images.length;
+        attempts++;
+      }
+      
+      if (attempts < images.length) {
+        showImage(nextIndex);
+      }
+    }
+
+    function prevImage() {
+      let prevIndex = (currentImageIndex - 1 + images.length) % images.length;
+      let attempts = 0;
+      
+      // Tìm ảnh trước đó có thể hiển thị
+      while (images[prevIndex].style.display === 'none' && attempts < images.length) {
+        prevIndex = (prevIndex - 1 + images.length) % images.length;
+        attempts++;
+      }
+      
+      if (attempts < images.length) {
+        showImage(prevIndex);
+      }
+    }
+
+    // Khởi tạo album
+    setTimeout(() => {
+      showImage(0);
+      // Tự động chuyển ảnh mỗi 5 giây
+      setInterval(nextImage, 5000);
+    }, 1000);
+
+    // Các hàm khác giữ nguyên
     function updateCountdown() {
       const now = new Date();
       const currentYear = now.getFullYear();
@@ -252,14 +358,12 @@
     }
     setInterval(updateCountdown, 1000); updateCountdown();
 
-    // 🎁 Gift
     function showGift(){
       document.getElementById("gift").style.display="block";
-      sendHearts(); // trái tim bay khi mở quà
-      alert("🎁 Bạn vừa mở quà! Nhưng... quà ảo thôi nhé 😜");
+      sendHearts();
+      alert("🎁 Đéo quá quà đâu nhé lew lew😜");
     }
 
-    // 🎶 Music
     let playing=false;
     function toggleMusic(){
       const music=document.getElementById("bgMusic");
@@ -269,7 +373,6 @@
       playing=!playing;
     }
 
-    // ❤️ Hearts + Thông báo
     function sendHearts(){
       const funnyText=document.getElementById("funny-text");
       funnyText.innerText="🥰 Cảm ơn cậu nhé! Trái tim bay tung tóe khắp màn hình ❤️";
@@ -285,12 +388,9 @@
         document.getElementById("heart-container").appendChild(heart);
         setTimeout(()=>heart.remove(),4000);
       }
-
-      // thêm TB hài hước
       setTimeout(()=>alert("💌 Cảm ơn đã bấm nút! Bạn vừa làm trái tim mình bay loạn xạ 🤣"),1000);
     }
 
-    // 😅 Grow Thanks button
     function growThanks(){
       let btn=document.getElementById("thanksBtn");
       let style=window.getComputedStyle(btn);
@@ -299,10 +399,9 @@
       const funnyText=document.getElementById("funny-text");
       funnyText.innerText="😏 Không cảm ơn cũng không thoát đâu, nút kia sẽ to dần đó!";
       funnyText.style.color="red";
-      alert("🙃 Không cảm ơn hả? Thế thì nút Cảm ơn sẽ ngày càng to ra đó nhé!");
+      alert("🙃 Dmm cảm ơn bố!");
     }
 
-    // 🎆 Fireworks
     const canvas=document.getElementById("fireworks");
     const ctx=canvas.getContext("2d");
     let particles=[];
@@ -334,34 +433,6 @@
       requestAnimationFrame(animate);
     }
     animate();
-    
-    // Album ảnh
-    let currentImageIndex = 0;
-    const images = document.querySelectorAll('.album img');
-
-    function showImage(index) {
-      // Ẩn tất cả ảnh
-      images.forEach(img => img.classList.remove('active'));
-      
-      // Hiển thị ảnh hiện tại
-      images[index].classList.add('active');
-    }
-
-    function nextImage() {
-      currentImageIndex = (currentImageIndex + 1) % images.length;
-      showImage(currentImageIndex);
-    }
-
-    function prevImage() {
-      currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
-      showImage(currentImageIndex);
-    }
-
-    // Tự động chuyển ảnh mỗi 5 giây
-    setInterval(nextImage, 5000);
-
-    // Hiển thị ảnh đầu tiên khi trang load
-    showImage(0);
   </script>
 </body>
 </html>
